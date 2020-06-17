@@ -19,6 +19,20 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "views/index.html"));
 });
 
+// API routes
+
+app.get("/api/notes", (req, res) => {
+    // TBD
+});
+
+app.post("/api/notes", (req, res) => {
+    // TBD
+});
+
+app.delete("/api/notes/:id", (req, res) => {
+    // TBD
+});
+
 // Listener
 app.listen( PORT, () => {
     console.log(`Listening to port: ${PORT}`);
