@@ -2,13 +2,22 @@ const fs = require("fs");
 const path = require("path");
 const util = require("util");
 
+const {v1: uuidv1} = require("uuid");
+
 const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile);
+
+const dbPath = path.join(__dirname, "../db/db.json");
 
 class Store {
 
     read() {
-        return readFileAsync(path.join(__dirname, "../db/db.json"), "utf8");
+        return readFileAsync(dbPath, "utf8");
 
+    }
+
+    write(content) {
+        return writeFileAsync(dbPath, content);
     }
 
     getNotes() {
@@ -22,24 +31,37 @@ class Store {
     
     }
 
+    saveNotes(notes) {
+        return this.write(JSON.stringify(notes));
+
+    }
+
     addNote() {
 
-        return this.getNotes().then( (notes) => {
+        return this
+            .getNotes()
+            .then( (notes) => {
         
-            console.log("Current items");
-            console.log(notes);
-    
-            console.log( "New item to add" );
-            console.log( req.body );
-    
-            res.end();
-    
+            const newNote = {...note, id: uuidv1() };
+            notes.push(newNote);
+
+            return this.saveNotes(notes).then(() => newNote);
+        
         });
     
     }
 
-    deleteNote() {
+    deleteNote(noteId) {
 
+        return this
+            .getNotes()
+            .then((notes) => {
+
+                const newList = notes.filter( (note) => note.id !== noteId);
+
+                this.saveNotes(newList);
+                
+            })
     }
 }
 

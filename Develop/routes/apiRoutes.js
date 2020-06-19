@@ -7,31 +7,30 @@ router.get("/notes", (req, res) => {
 
     store.getNotes().then( (notes) => {
         res.json(notes);
-    });
+    })
+    .catch((err) => res.status(500).json(err));
+
 
 });
 
 router.post("/notes", (req, res) => {
 
-    store.addNote(req.body).then( (notes) => {
-        res.json(notes);
-    });
+    store
+        .addNote(req.body)
+        .then( (note) => {
+            res.json(note);
+        })
+        .catch((err) => res.status(500).json(err));
 
-
-    // fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
-
-    //     const data = res.json( JSON.parse(data) );
-
-    // });
-
-
-    // console.log("CREATE Notes");
 });
 
 router.delete("/notes/:id", (req, res) => {
-    // TBD
+    
+    store
+        .deleteNote(req.params.id)
+        .then( () => res.json( {ok: true} ))
+        .catch((err) => res.status(500).json(err));
 
-    console.log("DELETE Notes");
 });
 
 module.exports = router;
