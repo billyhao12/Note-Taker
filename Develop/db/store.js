@@ -36,7 +36,7 @@ class Store {
 
     }
 
-    addNote() {
+    addNote(note) {
 
         return this
             .getNotes()
@@ -61,7 +61,7 @@ class Store {
 
                 this.saveNotes(newList);
                 
-            })
+            });
     }
 }
 
